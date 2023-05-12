@@ -1,7 +1,8 @@
 const {
     client,
     getAllUsers,
-    createUser
+    createUser,
+    updateUser
   } = require('./index');
   
 
@@ -9,13 +10,35 @@ const {
     try{
         console.log("Starting to create users...")
 
-        const albert = await createUser({username:'albert', password:'bertie99'})
-        const sandra = await createUser({ username: 'sandra', password: 'glamgal'});
-        console.log(albert)
-        console.log(sandra);
+        await createUser({username:"albert", password:"bertie99", location:"Noble", name:"Albert"})
+        await createUser({username:"sandra", password:"2sandy4me", location:"Broken Arrow", name:"Sandra"})
+        await createUser({username:"glamgal", password:"soglam", location:"Norman", name:"Glamgal"})
     }catch(err){
         console.error("Error creating users! ", err)
         throw err;
+    }
+  }
+  async function createInitialPost(){
+    try{
+        const [albert, sandra, glamgal]= await getAllUsers();
+
+        await createPost({
+            authorId: albert.id,
+            title:"First Post",
+            content:" this is my frist post."
+        })
+        await createPost({
+            authorId: sandra.id,
+            title:"First Post",
+            content:" this is my frist post."
+        })
+        await createPost({
+            authorId: glamgal.id,
+            title:"First Post",
+            content:" this is my frist post."
+        })
+    }catch(err){
+        console.error(err)
     }
   }
 
@@ -25,6 +48,7 @@ const {
       console.log("Starting to drop tables...");
   
       await client.query(`
+        DROP TABLE IF EXISTS post;
         DROP TABLE IF EXISTS users;
       `);
   
@@ -43,7 +67,17 @@ const {
         CREATE TABLE users (
           id SERIAL PRIMARY KEY,
           username varchar(255) UNIQUE NOT NULL,
-          password varchar(255) NOT NULL
+          password varchar(255) NOT NULL,
+          name varchar(255) NOT NULL,
+          location varchar(255) NOT NULL,
+          active BOOLEAN DEFAULT true
+        );
+        CREATE TABLE post (
+            id SERIAL PRIMARY KEY,
+            "authorId" INTEGER REFERENCES users(id),
+            title varchar(255) NOT NULL,
+            content TEXT NOT NULL,
+            active BOOLEAN DEFAULT true
         );
       `);
   
@@ -72,7 +106,31 @@ const {
   
       const users = await getAllUsers();
       console.log("getAllUsers:", users);
-  
+      console.log("Result:", users)
+      
+      console.log("Calling updateUser on the first user")
+      const updateUserResult = await updateUser(users[0].id,{
+        name:"Newname Sogood",
+        location:"Lesterville, KY"
+
+      })
+      console.log("Results:", updateUserResult)
+      
+      console.log("Calling getAllPosts");
+      const posts =await getAllPost();
+      console.log("Result:", posts)
+
+      console.log("Calling updatePost on posts[0]");
+      const updatePostResult = await updatePost(posts[0].id, {
+        title: "New Title",
+        content: "Updated Content"
+      });
+      console.log("Result:", updatePostResult);
+      
+      console.log("Calling getUserById with 1")
+      const albert = await getUserById(1);
+      console.log("Result:", albert);
+
       console.log("Finished database tests!");
     } catch (error) {
       console.error("Error testing database!");
