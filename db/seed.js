@@ -141,6 +141,7 @@ const {
       await createTables();
       await createInitialUsers();
       await createInitialPosts();
+      console.log("Rebuilt the DataBase!")
     } catch (error) {
       console.log("Error during rebuildDB")
       throw error;

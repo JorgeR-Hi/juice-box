@@ -150,7 +150,7 @@ async function updatePost(postId, fields = {}) {
 async function getAllPosts() {
   try {
     const { rows: postIds } = await client.query(`
-      SELECT id
+      SELECT *
       FROM posts;
     `);
 
@@ -308,6 +308,26 @@ async function addTagsToPost(postId, tagList) {
   }
 }
 
+async function getAllTags() {
+  try {
+    const { rows: tags } = await client.query(`
+      SELECT *
+      FROM tags;
+    `);
+
+    const posts = await Promise.all(tags.map(
+      async tag => {
+        const posts = await getPostById(tag.id);
+        return { ...tag, posts };
+      }
+    ));
+
+    return posts;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 module.exports = {
   client,
@@ -320,5 +340,6 @@ module.exports = {
   getAllPosts,
   getPostsByUser,
   getPostById,
-  getPostsByTagName
+  getPostsByTagName,
+  getAllTags
 }
