@@ -5,9 +5,9 @@ const usersRouter= require("./users");
 apiRouter.use("/", usersRouter);
 
 const postsRouter=require("./posts");
-apiRouter.use("/", postsRouter);
+apiRouter.use("/posts", postsRouter);
 
 const tagsRouter = require("./tags");
-apiRouter.use("/", tagsRouter);
+apiRouter.use("/tags", tagsRouter);
 
 module.exports = apiRouter;
