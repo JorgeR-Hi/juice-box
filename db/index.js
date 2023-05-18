@@ -56,7 +56,7 @@ async function getAllUsers() {
     return rows;
   }
 
-  async function getUserById(userId) {
+async function getUserById(userId) {
     try {
       const { rows: [ user ] } = await client.query(`
         SELECT id, username, location, active
@@ -76,7 +76,19 @@ async function getAllUsers() {
     }
   }
 
- 
+async function getUserByUsername(username){
+  try{
+    const {rows:[user]}=await client.query(`
+      SELECT *
+      FROM users
+      WHERE username = $1;
+    `, [username]);
+
+    return user;
+  }catch(err){
+    throw err;
+  }
+}
 
   async function createPost({
   authorId,
@@ -324,6 +336,7 @@ module.exports = {
   createUser,
   updateUser,
   getAllUsers,
+  getUserByUsername,
   getUserById,
   createPost,
   updatePost,
