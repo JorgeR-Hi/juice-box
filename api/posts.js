@@ -17,7 +17,18 @@ postsRouter.use((req, res, next) => {
 //=======GETTING ALL POST========
 postsRouter.get("/", async(req, res) =>{
    try{
-    const posts = await getAllPosts();
+    const allPosts = await getAllPosts();
+    const posts= allPosts.filter(post => {
+        if (post.active) {
+            return true;
+          }
+        
+          if (req.user && post.author.id === req.user.id) {
+            return true;
+          }
+        
+          return false;
+    })
     res.send({
         posts
     })
@@ -85,4 +96,31 @@ postsRouter.patch("/:postId", requireUser, async(req, res, next) => {
     }
 
 })
+
+//DELETE A POST
+postsRouter.delete("/:postId", requireUser, async (req, res, next) => {
+    try {
+      const post = await getPostById(req.params.postId);
+  
+      if (post && post.author.id === req.user.id) {
+        const updatedPost = await updatePost(post.id, { active: false });
+        res.send({ post: updatedPost });
+      } else {
+        next(
+          post
+            ? {
+                name: "UNAUTHORIZED_USER_ERROR",
+                message: "You cannot delete a post which is not yours",
+              }
+            : {
+                name: "POST_NOT_FOUND_ERROR",
+                message: "That post does not exist",
+              }
+        );
+      }
+    } catch ({ name, message }) {
+      next({ name, message });
+    }
+  });
+  
 module.exports= postsRouter;
