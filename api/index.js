@@ -45,7 +45,7 @@ const usersRouter= require("./users");
 apiRouter.use("/api/users", usersRouter);
 
 const postsRouter=require("./posts");
-apiRouter.use("/api/posts", postsRouter);
+apiRouter.use("/", postsRouter);
 
 const tagsRouter = require("./tags");
 apiRouter.use("/api/tags", tagsRouter);
