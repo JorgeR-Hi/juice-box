@@ -21,6 +21,11 @@ usersRouter.get("/", async(req, res) =>{
         console.error(err);
     }
 });
+
+
+//============LOGIN AND REGISTER ROUTES
+
+
 //=============Login============
 usersRouter.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
