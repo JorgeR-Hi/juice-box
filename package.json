@@ -1,7 +1,7 @@
 {
   "name": "juice-box",
   "version": "1.0.0",
-  "description": "tumblr clone",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "seed:dev": "nodemon ./db/seed.js",
@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "Jorge Ramirez",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
