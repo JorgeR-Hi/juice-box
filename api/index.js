@@ -42,7 +42,7 @@ apiRouter.use((req, res, next) =>{
     next();
 })
 const usersRouter= require("./users");
-apiRouter.use("/users", usersRouter);
+apiRouter.use("/", usersRouter);
 
 const postsRouter=require("./posts");
 apiRouter.use("/posts", postsRouter);
