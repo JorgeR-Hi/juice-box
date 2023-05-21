@@ -42,13 +42,13 @@ apiRouter.use((req, res, next) =>{
     next();
 })
 const usersRouter= require("./users");
-apiRouter.use("/api/users", usersRouter);
+apiRouter.use("/users", usersRouter);
 
 const postsRouter=require("./posts");
-apiRouter.use("/", postsRouter);
+apiRouter.use("/posts", postsRouter);
 
 const tagsRouter = require("./tags");
-apiRouter.use("/api/tags", tagsRouter);
+apiRouter.use("/tags", tagsRouter);
 
 
 //=======error handlers=======
