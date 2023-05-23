@@ -1,8 +1,8 @@
 require('dotenv').config();
 const { Client } = require('pg'); 
 
-const connection_string = process.env.DATABASE_URL || 'postgres://localhost:5432/juicebox-dev';
-const client = new Client({connection_string});
+const connection_string = process.env.DATABASE_URL;
+const client = new Client(connection_string);
 
 
 
